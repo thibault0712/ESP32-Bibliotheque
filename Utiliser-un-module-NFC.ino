@@ -2,9 +2,6 @@
 #include <RFID.h>
 #include <stdio.h>
 
-const char DOUT_LED_ROUGE = 2;
-const char DOUT_LED_VERTE = 3;
-
 RFID monModuleRFID(10,9);
 
 int AdminUID = 766; //Ici L'UID admin de la carte pour débloquer tous les antivoles
@@ -52,17 +49,14 @@ void loop()
                 Serial.println(F("Fermeture en cours...")); 
                 Serial.println(F("Fermé"));
                 isClosed = true; //Définit la fermeture sur oui
-                delay(1000);
               }else if (Card == SaveUID || Card == AdminUID){ //vérfie si la carte est la bonne pour ouvrir l'antivol ou que c'est la carte Admin
                 //Lance l'ouverture du système
                 SaveUID = 0; //Supprime l'UID enregistré
                 Serial.println(F("Ouverture en cours..."));
                 Serial.println(F("Ouvert"));
                 isClosed = false; //Définit la fermeture sur non
-                delay(1000);
               }else{ //Une fois toutes les conditions passés cela veut dire que la carte n'est pas bonne
                 Serial.println(F("Cette carte n'est pas la bonne"));
-                delay(1000);
               }
           }
           else
@@ -71,5 +65,5 @@ void loop()
           }          
           monModuleRFID.halt();
     }
-    delay(100);    
+    delay(500);    
 }
