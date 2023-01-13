@@ -107,17 +107,17 @@ void loop()
                 Serial.println(F("Fermeture en cours...")); 
                 Serial.println(F("Fermé"));
                 isClosed = true; //Définit la fermeture sur oui
-                delay(1000);
+                delay(500);
               }else if (Card == SaveUID || Card == AdminUID){ //vérfie si la carte est la bonne pour ouvrir l'antivol ou que c'est la carte Admin
                 //Lance l'ouverture du système
                 SaveUID = 0; //Supprime l'UID enregistré
                 Serial.println(F("Ouverture en cours..."));
                 Serial.println(F("Ouvert"));
                 isClosed = false; //Définit la fermeture sur non
-                delay(1000);
+                delay(500);
               }else{ //Une fois toutes les conditions passés cela veut dire que la carte n'est pas bonne
                 Serial.println(F("Cette carte n'est pas la bonne"));
-                delay(1000);
+                delay(500);
               }
           }
           else
