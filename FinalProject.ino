@@ -1,7 +1,6 @@
 #include <SPI.h>
 #include <RFID.h>
 #include <stdio.h>
-// Importation des librairies
 #include <WiFi.h>
 
 //Définition du serveur et des mots de passes wifi
@@ -40,9 +39,6 @@ String request(String idCard){
   }
   return(texte);
 }
-
-const char DOUT_LED_ROUGE = 2;
-const char DOUT_LED_VERTE = 3;
 
 RFID monModuleRFID(5,0);
 
