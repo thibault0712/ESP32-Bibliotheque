@@ -28,7 +28,10 @@ String request(String idCard){
   WiFiClient client;
   const int httpPort = 8999;
   if (!client.connect(site, httpPort)) {
-    //return "Connection au serveur echouée.";
+    return "Connection au serveur echouée.";
+    digitalWrite(RED, LOW);
+    digitalWrite(Orange, HIGH);
+    digitalWrite(Green, LOW);
   }
   // Maintenant on envoie la requete au serveur
   client.print(String("GET http://78.233.161.137:8999/Request/request.php?identifiant=" + idCard + "&HTTPversion="));
@@ -41,6 +44,9 @@ String request(String idCard){
     if (millis() - timeout > 1000) {  // Si timeout
       client.stop();
       return "Timeout du client !";
+      digitalWrite(RED, LOW);
+      digitalWrite(Orange, HIGH);
+      digitalWrite(Green, LOW);
     }
   }
 
