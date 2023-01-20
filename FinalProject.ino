@@ -9,7 +9,18 @@ const char* ssid = "Thibault";
 const char* password = "Bonjour1";
 const char* site = "78.233.161.137";
 
+//Définition des leds
+int Red = 12;
+int Orange = 14;
+int Green = 27;
+
 String texte; // Variable qui enregistrera le texte reçu
+RFID monModuleRFID(5,0);
+int AdminUID = 766; //Ici L'UID admin de la carte pour débloquer tous les antivoles
+int UID[5]={};
+int SaveUID = 0; //Ici l'UID qui est enregistré dans l'antivol quand il est fermé
+int Card = 0;
+bool isClosed = false; //Ici vérifie si l'entivol est fermé ou ouvert
 
 String request(String idCard){
   texte = "";
@@ -40,17 +51,6 @@ String request(String idCard){
   return(texte);
 }
 
-RFID monModuleRFID(5,0);
-
-int AdminUID = 766; //Ici L'UID admin de la carte pour débloquer tous les antivoles
-int UID[5]={};
-int SaveUID = 0; //Ici l'UID qui est enregistré dans l'antivol quand il est fermé
-int Card = 0;
-int MASTERKEY[3] = {832, 630 };
-bool isInUsers = false;
-bool isClosed = false; //Ici vérifie si l'entivol est fermé ou ouvert
-String nuidPICC = "nothing";
-
 void setup()
 {
   Serial.begin(115200);
@@ -60,8 +60,15 @@ void setup()
     Serial.println("");
   Serial.println("Démmarrage");
 
+  //On active les leds et on allume la led orange
+  pinMode(Red, OUTPUT);
+  pinMode(Orange, OUTPUT);
+  pinMode(Green, OUTPUT);
+  digitalWrite(RED, LOW);
+  digitalWrite(Orange, HIGH);
+  digitalWrite(Green, LOW);
+  
   // On commence par se connecter au réseau WiFi
-    
   Serial.print("Connexion au réseau WiFi ");
   Serial.print(ssid);
 
@@ -76,7 +83,10 @@ void setup()
   Serial.println("Connexion au WiFi réussie !");
   Serial.print("Adresse IP locale de l'ESP : ");
   Serial.println(WiFi.localIP());
-
+  
+  digitalWrite(Red, LOW);
+  digitalWrite(Orange, LOW);
+  digitalWrite(Green, HIGH);
 }
 
 void loop()
@@ -91,39 +101,50 @@ void loop()
           Card = 0;
           Card = UID[0] + UID[1] + UID[2] + UID[3];
 
-          int i=0; //Pour la boucle for
-          isInUsers = false; //Permet de reset la détection
-          for (i = 0 ; i < 4 ; i++){
-            if (MASTERKEY[i] == Card){
-              isInUsers = true;
-            }
-          }
           if (request(String(Card)) == "true" || Card == AdminUID)
           {
               if (isClosed == false) //Vérifie si l'antivol est ouvert
               {
                 //Lance la fermeture du système
                 SaveUID = Card; //Enregistre l'UID de la carte
-                Serial.println(F("Fermeture en cours...")); 
-                Serial.println(F("Fermé"));
+                Serial.println(F("Fermé"));//On signal l'utilisateur
+                digitalWrite(Red, HIGH);
+                digitalWrite(Orange, LOW);
+                digitalWrite(Green, LOW);
                 isClosed = true; //Définit la fermeture sur oui
-                delay(500);
               }else if (Card == SaveUID || Card == AdminUID){ //vérfie si la carte est la bonne pour ouvrir l'antivol ou que c'est la carte Admin
                 //Lance l'ouverture du système
                 SaveUID = 0; //Supprime l'UID enregistré
-                Serial.println(F("Ouverture en cours..."));
                 Serial.println(F("Ouvert"));
+                digitalWrite(RED, LOW);
+                digitalWrite(Orange, LOW);
+                digitalWrite(Green, HIGH);
                 isClosed = false; //Définit la fermeture sur non
-                delay(500);
               }else{ //Une fois toutes les conditions passés cela veut dire que la carte n'est pas bonne
                 Serial.println(F("Cette carte n'est pas la bonne"));
-                delay(500);
+                var = 0;
+                while(var <= 3){  //Permet de faire clignoter la led rouge
+                  digitalWrite(Red, HIGH);
+                  delay(150);
+                  digitalWrite(Red, LOW);
+                  delay(150);
+                  var++; // incrémente la variable
+                }
               }
           }
           else
           {
             Serial.print(Card);
+            var = 0;
+            while(var <= 3){  //Permet de faire clignoter la led rouge
+              digitalWrite(Red, HIGH);
+              delay(150);
+              digitalWrite(Red, LOW);
+              delay(150);
+              var++; // incrémente la variable
+            }
           }          
           monModuleRFID.halt();
-    }    
+    }
+    delay(500);
 }
