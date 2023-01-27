@@ -29,7 +29,7 @@ String request(String idCard){
   const int httpPort = 8999;
   if (!client.connect(site, httpPort)) {
     return "Connection au serveur echouée.";
-    digitalWrite(RED, LOW);
+    digitalWrite(Red, LOW);
     digitalWrite(Orange, HIGH);
     digitalWrite(Green, LOW);
   }
@@ -44,7 +44,7 @@ String request(String idCard){
     if (millis() - timeout > 1000) {  // Si timeout
       client.stop();
       return "Timeout du client !";
-      digitalWrite(RED, LOW);
+      digitalWrite(Red, LOW);
       digitalWrite(Orange, HIGH);
       digitalWrite(Green, LOW);
     }
@@ -70,7 +70,7 @@ void setup()
   pinMode(Red, OUTPUT);
   pinMode(Orange, OUTPUT);
   pinMode(Green, OUTPUT);
-  digitalWrite(RED, LOW);
+  digitalWrite(Red, LOW);
   digitalWrite(Orange, HIGH);
   digitalWrite(Green, LOW);
   
@@ -122,7 +122,7 @@ void loop()
                 //Lance l'ouverture du système
                 SaveUID = 0; //Supprime l'UID enregistré
                 Serial.println(F("Ouvert"));
-                digitalWrite(RED, LOW);
+                digitalWrite(Red, LOW);
                 digitalWrite(Orange, LOW);
                 digitalWrite(Green, HIGH);
                 isClosed = false; //Définit la fermeture sur non
