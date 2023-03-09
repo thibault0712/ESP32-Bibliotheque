@@ -107,7 +107,7 @@ void loop()
           Card = 0;
           Card = UID[0] + UID[1] + UID[2] + UID[3];
 
-          if (request(String(Card)) == "true" || Card == AdminUID)
+          if (request(String(Card)) != "false" || Card == AdminUID)
           {
               if (isClosed == false) //Vérifie si l'antivol est ouvert
               {
