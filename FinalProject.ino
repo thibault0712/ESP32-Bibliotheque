@@ -14,7 +14,14 @@ int Red = 12;
 int Orange = 14;
 int Green = 27;
 
-String texte; // Variable qui enregistrera le texte reçu
+//Définition du verrain
+int relay = 3;
+int relay2 = 4;
+int timeMaxMotor = 4000;
+int sizeMaxMotor = 40;
+int timeMotorPush = 0;
+
+String texte; // Variable qui enregistrera le texte reçu du site web
 RFID monModuleRFID(5,0);
 int AdminUID = 766; //Ici L'UID admin de la carte pour débloquer tous les antivoles
 int UID[5]={};
@@ -55,6 +62,24 @@ String request(String idCard){
     texte += client.readStringUntil('\r');
   }
   return(texte);
+}
+
+void actionMotor(int bicicleSize){
+  int sizeMotorPush = sizeMaxMotor - bicicleSize;
+  timeMotorPush = timeMaxMotor/sizeMaxMotor*sizeMotorPush;
+  digitalWrite(relay2, HIGH);
+  digitalWrite(relay, LOW);
+  delay(timeMotorPush);
+  digitalWrite(relay2, LOW);
+  digitalWrite(relay, LOW);
+}
+
+void resetMotor(){
+  digitalWrite(relay2, LOW);
+  digitalWrite(relay, HIGH);
+  delay(timeMotorPush);
+  digitalWrite(relay2, LOW);
+  digitalWrite(relay, LOW);
 }
 
 void setup()
@@ -117,6 +142,7 @@ void loop()
                 digitalWrite(Red, HIGH);
                 digitalWrite(Orange, LOW);
                 digitalWrite(Green, LOW);
+                actionMotor(request(String(Card))); //On récupère la taille de la roue puis on lance la fonction pour ajuster la hauteur
                 isClosed = true; //Définit la fermeture sur oui
               }else if (Card == SaveUID || Card == AdminUID){ //vérfie si la carte est la bonne pour ouvrir l'antivol ou que c'est la carte Admin
                 //Lance l'ouverture du système
@@ -125,6 +151,7 @@ void loop()
                 digitalWrite(Red, LOW);
                 digitalWrite(Orange, LOW);
                 digitalWrite(Green, HIGH);
+                resetMotor(); //On remet le verrain à son état initial
                 isClosed = false; //Définit la fermeture sur non
               }else{ //Une fois toutes les conditions passés cela veut dire que la carte n'est pas bonne
                 Serial.println(F("Cette carte n'est pas la bonne"));
