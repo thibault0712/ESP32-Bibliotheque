@@ -18,6 +18,10 @@ Code source permettant de lire l'identifiant d'une carte NFC, de savoir si elle 
 	- Rouge <-> 12
 	- Orange <-> 14
 	- Vert <-> 27
+- Verrain
+	- Le branchement du verrain est particulié, nous avons deux relais : le premier s'occupe du négatif et le second pour le positif
+	- relai négatif <-> 3
+	- relai positif <-> 4
 
 ## Futur objectif
 
