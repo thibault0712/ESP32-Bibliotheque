@@ -13,6 +13,7 @@ const char* site = "78.233.161.137";
 int Red = 12;
 int Orange = 14;
 int Green = 27;
+int repeat = 0; //Pour faire clignoter une led
 
 //Définition du verrain
 int relay = 3;
@@ -142,7 +143,7 @@ void loop()
                 digitalWrite(Red, HIGH);
                 digitalWrite(Orange, LOW);
                 digitalWrite(Green, LOW);
-                actionMotor(request(String(Card))); //On récupère la taille de la roue puis on lance la fonction pour ajuster la hauteur
+                actionMotor(request(String(Card)).toInt()); //On récupère la taille de la roue puis on lance la fonction pour ajuster la hauteur
                 isClosed = true; //Définit la fermeture sur oui
               }else if (Card == SaveUID || Card == AdminUID){ //vérfie si la carte est la bonne pour ouvrir l'antivol ou que c'est la carte Admin
                 //Lance l'ouverture du système
@@ -155,26 +156,26 @@ void loop()
                 isClosed = false; //Définit la fermeture sur non
               }else{ //Une fois toutes les conditions passés cela veut dire que la carte n'est pas bonne
                 Serial.println(F("Cette carte n'est pas la bonne"));
-                var = 0;
-                while(var <= 3){  //Permet de faire clignoter la led rouge
+                repeat = 0;
+                while(repeat <= 3){  //Permet de faire clignoter la led rouge
                   digitalWrite(Red, HIGH);
                   delay(150);
                   digitalWrite(Red, LOW);
                   delay(150);
-                  var++; // incrémente la variable
+                  repeat++; // incrémente la variable
                 }
               }
           }
           else
           {
             Serial.print(Card);
-            var = 0;
-            while(var <= 3){  //Permet de faire clignoter la led rouge
+            repeat = 0;
+            while(repeat <= 3){  //Permet de faire clignoter la led rouge
               digitalWrite(Red, HIGH);
               delay(150);
               digitalWrite(Red, LOW);
               delay(150);
-              var++; // incrémente la variable
+              repeat++; // incrémente la variable
             }
           }          
           monModuleRFID.halt();
