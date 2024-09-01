@@ -28,3 +28,8 @@ Code source permettant de lire l'identifiant d'une carte NFC, de savoir si elle 
 - Mieux sécuriser le projet
 - Rendre le code plus lisible
 
+
+
+
+ATENTION CODE TRES VIEUX ET ILLISIBLE LE CODE DOIT ETRE REFACTORISER
+
